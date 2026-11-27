@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const root = document.documentElement;
   const isEnglish = root.lang === 'en';
   const themeButton = document.querySelector('.theme-toggle');
@@ -6,6 +6,9 @@
   const nav = document.querySelector('.main-nav');
   const toc = document.querySelector('.toc');
   const tocButton = document.querySelector('.toc-toggle');
+
+  // Dark is the default theme; an explicitly saved user choice still takes precedence.
+  root.dataset.theme = 'dark';
 
   let savedTheme = null;
   try {

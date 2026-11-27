@@ -28,14 +28,45 @@ html[data-theme="dark"] {
   --page: #181c20;
 }
 
+html[data-theme="dark"] body {
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(12, 16, 21, .34) 0%,
+      rgba(12, 16, 21, .56) 30%,
+      rgba(12, 16, 21, .82) 62%,
+      var(--page) 100%
+    ),
+    url("images/dexter-cover.jpg");
+}
+
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; scroll-snap-type: y proximity; }
 html[lang="en"] { font-family: Inter, Arial, sans-serif; }
 html[dir="ltr"] .skip-link { right: auto; left: 10px; }
 html[dir="ltr"] .article-content h2 { padding-right: 0; padding-left: 16px; }
 html[dir="ltr"] .article-content h2::before { right: auto; left: 0; }
 html[dir="ltr"] .toc-list { padding: 13px 16px 16px 38px; }
-body { margin: 0; background: var(--page); color: var(--ink); font-size: 17px; line-height: 1.95; transition: background .25s, color .25s; }
+body {
+  margin: 0;
+  background-color: var(--page);
+  background-image:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--page) 28%, transparent) 0%,
+      color-mix(in srgb, var(--page) 42%, transparent) 24%,
+      color-mix(in srgb, var(--page) 76%, transparent) 55%,
+      var(--page) 100%
+    ),
+    url("images/dexter-cover.jpg");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 100% 780px, 100% 780px;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.95;
+  transition: background-color .25s, color .25s;
+}
 a { color: inherit; text-decoration: none; }
 button { font: inherit; }
 .shell { width: min(1480px, calc(100% - 48px)); margin-inline: auto; }
@@ -77,9 +108,11 @@ h1 { max-width: 1080px; margin: 10px 0 12px; color: var(--navy); font-size: clam
 .meta-divider { width: 3px; height: 3px; border-radius: 50%; background: #a6a9aa; }
 
 .media-frame { overflow: hidden; margin: 0; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: var(--shadow); }
-.media-image { display: block; width: 100%; height: auto; object-fit: cover; }
+.media-image { display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; object-fit: cover; }
 .media-frame figcaption { padding: 10px 15px; color: var(--muted); font-size: 13px; }
-.hero-media { margin-bottom: 25px; }
+.hero-media { display: none; }
+.article-header,
+.breadcrumbs { position: relative; z-index: 1; }
 
 .article-content { max-width: 1260px; margin-inline: auto; font-size: 17px; line-height: 2.15; }
 .article-content p { margin-bottom: 18px; }
@@ -95,11 +128,12 @@ h1 { max-width: 1080px; margin: 10px 0 12px; color: var(--navy); font-size: clam
 .toc-list a:hover { color: var(--red); }
 .toc.is-collapsed .toc-list { display: none; }
 
-.article-content section { margin-top: 45px; scroll-margin-top: 105px; }
+.article-content section { margin-top: 45px; scroll-margin-top: 105px; scroll-snap-align: start; scroll-snap-stop: normal; }
 .article-content h2 { position: relative; margin-bottom: 16px; padding-right: 16px; color: var(--navy); font-size: 26px; font-weight: 800; line-height: 1.7; }
 .article-content h2::before { position: absolute; top: .45em; right: 0; width: 4px; height: 1.1em; border-radius: 5px; background: var(--red); content: ""; }
 .inline-media { margin: 24px 0 30px; }
-.portrait-media { width: min(100%, 460px); margin-inline: auto; }
+.portrait-media { width: 100%; margin-inline: auto; }
+.portrait-media .media-image { object-position: center 35%; aspect-ratio: 16 / 9; }
 .spoiler-section { padding: 20px; border: 1px solid color-mix(in srgb, var(--red) 24%, var(--line)); border-radius: 14px; background: color-mix(in srgb, var(--red) 3%, var(--surface)); }
 .spoiler-label { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 10px; color: var(--red); font-size: 14px; font-weight: 700; }
 .spoiler-label span { display: grid; place-items: center; width: 20px; height: 20px; border: 1px solid currentColor; border-radius: 50%; }
@@ -181,6 +215,7 @@ html[dir="ltr"] .faq-section summary::after { right: 4px; left: auto; }
   .sidebar-sticky { position: static; grid-template-columns: 1fr 1fr; }
   .footer-widgets { padding-top: 0; }
   .article-header { padding-top: 24px; }
+  .media-image { aspect-ratio: 16 / 9; }
 }
 @media (max-width: 520px) {
   body { font-size: 16px; }
@@ -207,6 +242,198 @@ html[dir="ltr"] .faq-section summary::after { right: 4px; left: auto; }
   .welcome-hint-copy span { font-size: 12px; }
   .welcome-hint-dismiss { padding: 7px 9px; font-size: 12px; }
 }
+@media (max-width: 760px) {
+  html { scroll-snap-type: y proximity; }
+}
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-snap-type: none; }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+/* Article reading rhythm and consistent editorial media */
+.article-content section { margin-top: 38px; padding-bottom: 2px; }
+.article-content section > p { max-width: 1120px; margin-bottom: 16px; }
+.media-frame { width: min(100%, 1120px); margin-inline: auto; }
+.media-image { width: 100%; aspect-ratio: 16 / 9; height: auto; object-fit: cover; object-position: center; }
+.watch-order-table { max-width: 1120px; margin: 18px 0 20px; padding: 18px 24px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.watch-order-table ol { margin: 0; padding-inline-start: 22px; }
+.watch-order-table li { margin: 7px 0; padding-inline-start: 5px; }
+.watch-order-table strong { color: var(--navy); }
+.article-content section { scroll-margin-top: 108px; scroll-snap-align: start; }
+@media (max-width: 760px) {
+  .article-content section { margin-top: 30px; }
+  .media-frame { border-radius: 12px; }
+  .watch-order-table { padding: 14px 18px; }
+}
+
+/* Accent the compact labels in the series information panel */
+.series-facts-grid dt {
+  color: var(--red);
+  font-weight: 800;
+}
+
+
+/* Editorial enhancements: visible cover, trivia cards, and a clear watch roadmap */
+.hero-media { display: block; margin: 22px 0 34px; }
+.hero-media .media-image { aspect-ratio: 16 / 8.5; max-height: 620px; object-position: center 38%; }
+.trivia-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 24px 0 28px; }
+.trivia-card { position: relative; min-height: 220px; padding: 22px 20px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 96%, var(--teal)), var(--surface)); box-shadow: var(--shadow); }
+.trivia-index { display: inline-grid; place-items: center; width: 38px; height: 38px; margin-bottom: 12px; border: 1px solid color-mix(in srgb, var(--red) 28%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--red) 9%, var(--surface)); color: var(--red); font-size: 14px; font-weight: 800; }
+.trivia-card h3 { margin: 0 0 8px; color: var(--navy); font-size: 18px; line-height: 1.6; }
+.trivia-card p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.9; }
+.watch-roadmap { max-width: 1120px; margin: 22px 0 24px; padding: clamp(18px, 3vw, 30px); border: 1px solid color-mix(in srgb, var(--teal) 30%, var(--line)); border-radius: 20px; background: radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--red) 9%, transparent), transparent 35%), linear-gradient(145deg, color-mix(in srgb, var(--teal) 7%, var(--surface)), var(--surface)); box-shadow: var(--shadow); }
+.roadmap-heading { display: grid; gap: 3px; margin-bottom: 18px; }
+.roadmap-kicker { color: var(--red); font-size: 12px; font-weight: 800; letter-spacing: .04em; }
+.roadmap-heading strong { color: var(--navy); font-size: 20px; }
+.watch-roadmap-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.watch-roadmap-list li { min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 16px 14px; border: 1px solid var(--line); border-radius: 15px; background: color-mix(in srgb, var(--surface) 88%, transparent); }
+.roadmap-index { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--red); color: #fff; font-size: 13px; font-weight: 800; }
+.watch-roadmap-list h3 { margin: 0 0 4px; color: var(--navy); font-size: 16px; line-height: 1.5; direction: ltr; text-align: right; overflow-wrap: anywhere; }
+.watch-roadmap-list p { min-height: 44px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.roadmap-tag { align-self: flex-start; padding: 4px 9px; border-radius: 999px; background: color-mix(in srgb, var(--teal) 14%, var(--surface)); color: var(--teal); font-size: 11px; font-weight: 700; }
+.roadmap-note { margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; line-height: 1.9; }
+.conclusion-section { max-width: 1120px; margin: 44px auto 34px !important; padding: clamp(22px, 4vw, 38px); border: 1px solid color-mix(in srgb, var(--red) 28%, var(--line)); border-radius: 20px; background: linear-gradient(135deg, color-mix(in srgb, var(--red) 8%, var(--surface)), color-mix(in srgb, var(--teal) 8%, var(--surface)) 70%, var(--surface)); box-shadow: var(--shadow); }
+.conclusion-section h2 { margin-top: 0; }
+.conclusion-prompt { padding: 12px 16px; border-inline-start: 3px solid var(--red); border-radius: 8px; background: color-mix(in srgb, var(--surface) 78%, transparent); }
+.conclusion-link { display: inline-flex; align-items: center; gap: 9px; margin-top: 2px; color: var(--red); font-weight: 800; }
+.conclusion-link:hover { gap: 13px; }
+@media (max-width: 900px) { .trivia-grid { grid-template-columns: 1fr 1fr; } .watch-roadmap-list { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .trivia-grid, .watch-roadmap-list { grid-template-columns: 1fr; } .trivia-card { min-height: unset; padding: 18px; } .watch-roadmap-list li { display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: start; } .roadmap-index { grid-row: span 2; } .watch-roadmap-list p { min-height: 0; } .hero-media .media-image { aspect-ratio: 4 / 3; } }
+
+.roadmap-core { background: color-mix(in srgb, var(--red) 12%, var(--surface)); color: var(--red); }
+
+body { background-image: radial-gradient(ellipse 88% 520px at 48% 0%, color-mix(in srgb, var(--teal) 9%, transparent), transparent 73%), radial-gradient(ellipse 56% 420px at 95% 0%, color-mix(in srgb, var(--red) 7%, transparent), transparent 72%); background-repeat: no-repeat; background-position: center top; background-size: 100% 780px; }
+html[data-theme="dark"] body { background-image: radial-gradient(ellipse 88% 520px at 48% 0%, color-mix(in srgb, var(--teal) 10%, transparent), transparent 73%), radial-gradient(ellipse 56% 420px at 95% 0%, color-mix(in srgb, var(--red) 8%, transparent), transparent 72%); }
+.watch-roadmap-list h3 { text-align: left; }
+
+.roadmap-required { background: color-mix(in srgb, var(--red) 12%, var(--surface)); color: var(--red); }
+
+/* Dexter article roadmap and season guide */
+.section-intro { color: var(--muted); }
+.season-guide-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; margin: 22px 0 12px; }
+.season-guide-card { position: relative; min-width: 0; padding: 20px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(150deg, color-mix(in srgb, var(--surface) 96%, var(--teal)), var(--surface)); box-shadow: var(--shadow); }
+.season-guide-card::after { position: absolute; inset-inline-end: -28px; top: -33px; width: 92px; height: 92px; border: 1px solid color-mix(in srgb, var(--red) 14%, transparent); border-radius: 50%; content: ""; pointer-events: none; }
+.season-guide-heading { display: grid; grid-template-columns: 52px minmax(0, 1fr); align-items: start; gap: 10px; margin-bottom: 9px; }
+.season-guide-heading > span { display: grid; place-items: center; min-height: 36px; border-radius: 11px; background: color-mix(in srgb, var(--red) 10%, var(--surface)); color: var(--red); font-size: 13px; font-weight: 800; }
+.season-guide-heading h3 { margin: 2px 0 0; color: var(--navy); font-size: 17px; line-height: 1.65; }
+.season-guide-card > p { margin: 0 0 13px; color: var(--muted); font-size: 14px; line-height: 1.95; }
+.season-mood { display: inline-flex; padding: 4px 10px; border-radius: 999px; background: color-mix(in srgb, var(--teal) 12%, var(--surface)); color: var(--teal); font-size: 12px; font-weight: 700; }
+.spoiler-disclosure { margin-top: 14px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--red) 26%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--red) 5%, var(--surface)); }
+.spoiler-disclosure summary { color: var(--red); font-size: 14px; font-weight: 800; cursor: pointer; }
+.spoiler-disclosure[open] summary { margin-bottom: 9px; }
+.spoiler-disclosure p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.9; }
+.season-summary-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 20px 0; padding: 0; list-style: none; }
+.season-summary-list li { padding: 13px 15px; border-inline-start: 3px solid var(--teal); border-radius: 10px; background: var(--soft); color: var(--muted); font-size: 14px; line-height: 1.8; }
+.season-summary-list strong { color: var(--navy); }
+.character-feature-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 20px 0; }
+.character-feature, .technique-card { padding: 20px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); box-shadow: var(--shadow); }
+.character-feature h3, .technique-card h3 { margin: 0 0 9px; color: var(--navy); font-size: 18px; }
+.character-feature p, .technique-card p { margin: 0 0 10px; color: var(--muted); font-size: 14px; line-height: 1.95; }
+.character-feature p:last-child, .technique-card p:last-child { margin-bottom: 0; }
+.technique-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 20px 0; }
+.technique-card > span { display: inline-grid; place-items: center; width: 34px; height: 34px; margin-bottom: 12px; border-radius: 10px; background: color-mix(in srgb, var(--red) 10%, var(--surface)); color: var(--red); font-size: 12px; font-weight: 800; }
+.pros-cons-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 22px 0; }
+.pros-card, .cons-card { padding: 19px 21px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); }
+.pros-card { border-top: 3px solid var(--teal); }
+.cons-card { border-top: 3px solid var(--red); }
+.pros-card h3, .cons-card h3 { margin: 0 0 10px; color: var(--navy); font-size: 17px; }
+.pros-card ul, .cons-card ul { margin: 0; padding-inline-start: 20px; color: var(--muted); font-size: 14px; line-height: 1.95; }
+.source-section a { color: var(--teal); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--teal) 35%, transparent); text-underline-offset: 3px; }
+.watch-order-section .watch-roadmap { margin-top: 20px; }
+.article-content section[id] { scroll-margin-top: 110px; }
+@media (max-width: 900px) {
+  .technique-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .season-guide-grid, .character-feature-grid, .technique-grid, .pros-cons-grid, .season-summary-list { grid-template-columns: 1fr; }
+  .season-guide-card, .character-feature, .technique-card { padding: 17px; }
+  .season-guide-heading { grid-template-columns: 46px minmax(0, 1fr); }
+}
+
+/* Full-width cover that fades into the page background, Filimo-inspired */
+body { position: relative; isolation: isolate; background-image: none; }
+body::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 auto;
+  height: clamp(680px, 66vw, 980px);
+  background-repeat: no-repeat;
+  background-position: center top, center 38%;
+  background-size: 100% 100%, cover;
+  content: "";
+  pointer-events: none;
+}
+html:not([data-theme="dark"]) body::before {
+  background-image:
+    linear-gradient(180deg, rgba(252, 250, 238, .10) 0%, rgba(252, 250, 238, .58) 30%, rgba(245, 242, 232, .92) 68%, var(--page) 100%),
+    url("images/dexter-cover.jpg");
+}
+html[data-theme="dark"] body::before {
+  background-image:
+    linear-gradient(180deg, rgba(9, 13, 18, .12) 0%, rgba(12, 16, 21, .42) 34%, rgba(18, 22, 26, .88) 72%, var(--page) 100%),
+    url("images/dexter-cover.jpg");
+}
+.hero-media {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* IMDb rating and audience fit */
+.audience-rating-card {
+  display: grid;
+  grid-template-columns: minmax(170px, .38fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(18px, 3vw, 34px);
+  margin: 20px 0;
+  padding: clamp(18px, 3vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(130deg, color-mix(in srgb, var(--red) 7%, var(--surface)), var(--surface) 64%);
+  box-shadow: var(--shadow);
+}
+.audience-rating-score { display: grid; justify-items: start; gap: 2px; }
+.audience-rating-score > span:first-child { color: var(--muted); font-size: 13px; font-weight: 700; }
+.audience-rating-score strong { color: var(--red); font-size: 48px; line-height: 1.2; direction: ltr; }
+.audience-rating-score strong small { color: var(--muted); font-size: 18px; font-weight: 500; }
+.audience-rating-note { color: var(--muted); font-size: 12px; }
+.audience-rating-card > p { margin: 0; color: var(--muted); font-size: 15px; line-height: 2; }
+.audience-section h3 { margin: 24px 0 12px; color: var(--navy); font-size: 18px; }
+.audience-fit-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0 0 18px; padding: 0; list-style: none; }
+.audience-fit-list li { padding: 13px 15px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--muted); font-size: 14px; line-height: 1.8; }
+.audience-fit-list li::before { display: inline-block; width: 7px; height: 7px; margin-inline-end: 8px; border-radius: 50%; background: var(--red); content: ""; vertical-align: middle; }
+.audience-section > p:last-child { color: var(--muted); font-size: 14px; }
+.source-section a { color: var(--red); }
+
+/* A restrained brand-red edge helps light-theme cards read as separate surfaces */
+html:not([data-theme="dark"]) .series-facts-card,
+html:not([data-theme="dark"]) .watch-roadmap,
+html:not([data-theme="dark"]) .watch-roadmap-list li,
+html:not([data-theme="dark"]) .season-guide-card,
+html:not([data-theme="dark"]) .trivia-card,
+html:not([data-theme="dark"]) .character-feature,
+html:not([data-theme="dark"]) .technique-card,
+html:not([data-theme="dark"]) .pros-card,
+html:not([data-theme="dark"]) .cons-card,
+html:not([data-theme="dark"]) .side-card,
+html:not([data-theme="dark"]) .author-card,
+html:not([data-theme="dark"]) .watch-order-table,
+html:not([data-theme="dark"]) .audience-rating-card,
+html:not([data-theme="dark"]) .audience-fit-list li {
+  border-inline-start: 3px solid color-mix(in srgb, var(--red) 72%, var(--line));
+}
+html:not([data-theme="dark"]) .season-summary-list li { border-inline-start-color: var(--red); }
+
+@media (max-width: 600px) {
+  .audience-rating-card { grid-template-columns: 1fr; gap: 12px; }
+  .audience-rating-score { grid-template-columns: auto auto; align-items: baseline; column-gap: 9px; }
+  .audience-rating-score > span:first-child { grid-column: 1 / -1; }
+  .audience-rating-score strong { font-size: 40px; }
+  .audience-rating-note { align-self: center; }
+  .audience-fit-list { grid-template-columns: 1fr; }
 }
